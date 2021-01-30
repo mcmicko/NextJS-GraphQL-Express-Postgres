@@ -5,6 +5,7 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
 import { User } from "../entities/User";
@@ -39,10 +40,20 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  me(@Ctx() { req, em }: MyContext) {
+    // you are not logged in
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = em.findOne(User, { id: req.session.userId });
+    return user;
+  }
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
       return {
@@ -71,7 +82,6 @@ export class UserResolver {
     } catch (err) {
       //duplicate username
       if (err.code === "23505") {
-        //|| err.detail.includes("already exists")) {
         return {
           errors: [
             {
@@ -83,6 +93,8 @@ export class UserResolver {
       }
       console.log("message:", err.message);
     }
+    //store user id session
+    req.session.userId = user.id;
 
     return { user };
   }
@@ -90,9 +102,10 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
+
     if (!user) {
       return {
         errors: [
@@ -103,6 +116,7 @@ export class UserResolver {
         ],
       };
     }
+
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) {
       return {
@@ -114,6 +128,8 @@ export class UserResolver {
         ],
       };
     }
+
+    req.session.userId = user.id;
 
     return { user };
   }
