@@ -15,3 +15,5 @@ Includes the follow technologies:
 - Next.js
 - TypeGraphQL
 - Chakra
+
+<img alt="Lireddit" src="Lireddit 1.png" />
