@@ -8,6 +8,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import path from "path";
 
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
@@ -24,8 +25,10 @@ const main = async () => {
     password: "zrenjaninac",
     synchronize: true,
     logging: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
+  await conn.runMigrations();
 
   // const orm = await MikroORM.init(microConfig);
   // await orm.getMigrator().up();
