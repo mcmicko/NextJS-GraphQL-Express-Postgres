@@ -30,6 +30,8 @@ const main = async () => {
   });
   // await conn.runMigrations();
 
+  // await Post.delete({});
+
   // const orm = await MikroORM.init(microConfig);
   // await orm.getMigrator().up();
 
