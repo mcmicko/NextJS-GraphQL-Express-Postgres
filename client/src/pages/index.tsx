@@ -16,9 +16,10 @@ import NextLink from "next/link";
 
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 10,
+    limit: 11,
     cursor: null as null | string,
   });
+
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });
@@ -29,31 +30,32 @@ const Index = () => {
 
   return (
     <Layout>
-      <Flex>
-        <Heading>CloneReddit</Heading>
+      <Flex align="center">
+        <Heading>LiReddit</Heading>
         <NextLink href="/create-post">
           <Link ml="auto">create post</Link>
         </NextLink>
       </Flex>
+      <br />
       {!data && fetching ? (
-        <div>loading....</div>
+        <div>loading...</div>
       ) : (
         <Stack spacing={8}>
-          {data.posts.map((p) => (
+          {data!.posts.posts.map((p) => (
             <Box key={p.id} p={5} shadow="md" borderWidth="1px">
               <Heading fontSize="xl">{p.title}</Heading>
-              <Text mt={4}>{p.textSnippet + "..."}</Text>
+              <Text mt={4}>{p.textSnippet}</Text>
             </Box>
           ))}
         </Stack>
       )}
-      {data ? (
+      {data && data.posts.hasMore ? (
         <Flex>
           <Button
             onClick={() => {
               setVariables({
                 limit: variables.limit,
-                cursor: data.posts[data.posts.length - 1].createdAt,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
               });
             }}
             isLoading={fetching}
