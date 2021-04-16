@@ -90,20 +90,26 @@ export const createUrqlClient = (ssrExchange: any) => ({
                 fragment _ on Post {
                   id
                   points
+                  voteStatus
                 }
               `,
               { id: postId } as any
             );
-            console.log("data: ", data);
+
             if (data) {
-              const newPoints = (data.points as number) + value;
+              if (data.voteStatus === value) {
+                return;
+              }
+              const newPoints =
+                (data.points as number) + (!data.voteStatus ? 1 : 2) * value;
               cache.writeFragment(
                 gql`
                   fragment __ on Post {
                     points
+                    voteStatus
                   }
                 `,
-                { id: postId, points: newPoints } as any
+                { id: postId, points: newPoints, voteStatus: value } as any
               );
             }
           },
@@ -116,7 +122,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
               cache.invalidate("Query", "posts", fi.arguments || {});
             });
           },
-
           logout: (_result, args, cache, info) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
               cache,
@@ -125,7 +130,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
               () => ({ me: null })
             );
           },
-
           login: (_result, args, cache, info) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
@@ -142,7 +146,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
               }
             );
           },
-
           register: (_result, args, cache, info) => {
             betterUpdateQuery<RegisterMutation, MeQuery>(
               cache,
