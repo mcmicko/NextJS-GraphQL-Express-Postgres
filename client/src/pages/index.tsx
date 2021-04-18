@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
+import {
+  useDeletePostMutation,
+  useMeQuery,
+  usePostsQuery,
+} from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import {
   Box,
@@ -21,6 +25,7 @@ const Index = () => {
     cursor: null as null | string,
   });
 
+  const [{ data: meData }] = useMeQuery();
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });
@@ -59,14 +64,26 @@ const Index = () => {
                     <Text flex={1} mt={4}>
                       {p.textSnippet}
                     </Text>
-                    <Button
-                      style={{ color: "red" }}
-                      onClick={() => {
-                        deletePost({ id: p.id });
-                      }}
-                    >
-                      Delete
-                    </Button>
+                    {meData?.me?.id !== p.creator.id ? null : (
+                      <Box ml="auto">
+                        <NextLink
+                          href="/post/edit/[id]"
+                          as={`/post/edit/${p.id}`}
+                        >
+                          <Button style={{ color: "green" }} onClick={() => {}}>
+                            Edit Post
+                          </Button>
+                        </NextLink>
+                        <Button
+                          style={{ color: "red" }}
+                          onClick={() => {
+                            deletePost({ id: p.id });
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    )}
                   </Flex>
                 </Box>
               </Flex>
