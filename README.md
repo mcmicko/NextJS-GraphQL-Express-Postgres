@@ -1,6 +1,6 @@
 # NextJS GraphQL Express PostgresSQL
 
-<h3>A fullstack project course that teaches you how to build a backend and frontend from scratch then deploy it.</h3>
+<h3>Building Reddit clone application, but purpose of this project create boilerplate for future projects.</h3>
 
 Includes the follow technologies:
 
@@ -16,4 +16,8 @@ Includes the follow technologies:
 - TypeGraphQL
 - Chakra
 
-<img alt="Lireddit" src="Lireddit 1.png" />
+<img alt="Lireddit" src="./screenshots/Lireddit 1.png" />
+create post:
+<img alt="Lireddit" src="./screenshots/liredit-create-post.png" />
+lazy loading:
+<img alt="Lireddit" src="./screenshots/lazy_loading.gif" />

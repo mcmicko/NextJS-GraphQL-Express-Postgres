@@ -41,7 +41,7 @@ const cursorPagination = (): Resolver => {
       return undefined;
     }
 
-    const fieldKey = `${fieldName} (${stringifyVariables(fieldArgs)})`;
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
     const isItInTheCache = cache.resolve(
       cache.resolveFieldByKey(entityKey, fieldKey) as string,
       "posts"
