@@ -18,6 +18,6 @@ Includes the follow technologies:
 
 <img alt="Lireddit" src="./screenshots/Lireddit 1.png" />
 create post:
-<img alt="Lireddit" src="./screenshots/liredit-create-post.png" />
+<img alt="Lireddit" src="./screenshots/CRUD.gif" />
 lazy loading:
 <img alt="Lireddit" src="./screenshots/lazy_loading.gif" />
