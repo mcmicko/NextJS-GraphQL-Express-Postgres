@@ -16,7 +16,6 @@ Includes the follow technologies:
 - TypeGraphQL
 - Chakra
 
-<img alt="Lireddit" src="./screenshots/Lireddit 1.png" />
 create post:
 <img alt="Lireddit" src="./screenshots/CRUD.gif" />
 lazy loading:
